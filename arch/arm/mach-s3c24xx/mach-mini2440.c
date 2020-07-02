@@ -256,27 +256,24 @@ static struct gpiod_lookup_table mini2440_mmc_gpio_table = {
 static struct mtd_partition mini2440_default_nand_part[] __initdata = {
 	[0] = {
 		.name	= "u-boot",
-		.size	= SZ_256K,
+		.size	= SZ_512K+SZ_256K+SZ_128K,
 		.offset	= 0,
 	},
 	[1] = {
-		.name	= "u-boot-env",
+		.name	= "env",
+		.offset = MTDPART_OFS_APPEND,
 		.size	= SZ_128K,
-		.offset	= SZ_256K,
 	},
 	[2] = {
 		.name	= "kernel",
-		/* 5 megabytes, for a kernel with no modules
-		 * or a uImage with a ramdisk attached
-		 */
-		.size	= 0x00500000,
-		.offset	= SZ_256K + SZ_128K,
+		.offset = MTDPART_OFS_APPEND,
+		.size	= SZ_8M,
 	},
 	[3] = {
-		.name	= "root",
-		.offset	= SZ_256K + SZ_128K + 0x00500000,
+		.name	= "rootfs",
+		.offset	= MTDPART_OFS_APPEND,
 		.size	= MTDPART_SIZ_FULL,
-	},
+	}
 };
 
 static struct s3c2410_nand_set mini2440_nand_sets[] __initdata = {
@@ -296,7 +293,7 @@ static struct s3c2410_platform_nand mini2440_nand_info __initdata = {
 	.nr_sets	= ARRAY_SIZE(mini2440_nand_sets),
 	.sets		= mini2440_nand_sets,
 	.ignore_unset_ecc = 1,
-	.ecc_mode	= NAND_ECC_HW,
+	.ecc_mode	= NAND_ECC_SOFT,
 };
 
 /* DM9000AEP 10/100 ethernet controller */

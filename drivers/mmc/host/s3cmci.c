@@ -1743,7 +1743,7 @@ static void s3cmci_shutdown(struct platform_device *pdev)
 	struct mmc_host	*mmc = platform_get_drvdata(pdev);
 	struct s3cmci_host *host = mmc_priv(mmc);
 
-	if (host->irq_cd >= 0)
+	if (host->irq_cd > 0)
 		free_irq(host->irq_cd, host);
 
 	s3cmci_debugfs_remove(host);
